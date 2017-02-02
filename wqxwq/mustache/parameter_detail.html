@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{label}}</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{label}}</h1>
+        {{#page_config.can_change}}
+        <a href="{{rt}}/parameters/{{id}}/edit" data-icon="edit" data-transition="flip">
+          Edit
+        </a>
+        {{/page_config.can_change}}
+      </div>
+      <div role="main" class="ui-content">
+          <h1>{{label}}</h1>
+          <table>
+            <tr>
+              <th>Name</th>
+              <td>{{name}}</td>
+            </tr>
+            <tr>
+              <th>Slug</th>
+              <td>{{slug}}</td>
+            </tr>
+            <tr>
+              <th>Is Numeric</th>
+              <td>{{is_numeric}}</td>
+            </tr>
+            <tr>
+              <th>Units</th>
+              <td>{{units}}</td>
+            </tr>
+            <tr>
+              <th>Method</th>
+              <td><a href="{{rt}}/parametermethods/{{method_id}}">{{method_label}}</a></td>
+            </tr>
+            <tr>
+              <th>Identifiers</th>
+              <td>
+                {{#identifiers}}
+                <table>
+                  <tr>
+                    <th>Name</th>
+                    <td>{{name}}</td>
+                  </tr>
+                  <tr>
+                    <th>Slug</th>
+                    <td>{{slug}}</td>
+                  </tr>
+                  <tr>
+                    <th>Authority</th>
+                    <td>{{authority_label}}</td>
+                  </tr>
+                  <tr>
+                    <th>Is Primary</th>
+                    <td>{{is_primary}}</td>
+                  </tr>
+                </table>
+                <hr>
+                {{/identifiers}}
+              </td>
+            </tr>
+          </table>
+      </div>
+    </div>
+  </body>
+</html>

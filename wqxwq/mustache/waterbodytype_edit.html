@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} waterbodytype</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} waterbodytype</h1>
+      </div>
+      <div role="main" class="ui-content">
+        <form action="{{svc}}/waterbodytypes/{{id}}" method="post" data-ajax="false"
+            data-wq-json="true"
+            {{#outbox_id}}
+              data-wq-outbox-id="{{outbox_id}}"
+              data-wq-outbox-preserve="icon,"
+            {{/outbox_id}}>
+          {{>csrf}}
+          {{#id}}
+          <input type=hidden name="_method" value="PUT">
+          {{/id}}
+          <ul data-role="listview" data-inset="true">
+            <li class="ui-field-contain">
+              <label for='waterbodytype-name'>Name</label>
+              <input id='waterbodytype-name' type='text' data-xform-type='string' name='name' value="{{name}}">
+              <p class='error waterbodytype-name-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='waterbodytype-slug'>Slug</label>
+              <input id='waterbodytype-slug' type='text' data-xform-type='string' name='slug' required value="{{slug}}">
+              <p class='error waterbodytype-slug-errors'></p>
+            </li>
+            {{^icon.name}}
+            <li class="ui-field-contain">
+              <img src="{{rt}}/images/empty.png"
+                   id="waterbodytype-icon-preview">
+              <label for="waterbodytype-icon">Photo</label>
+              {{#native}}
+              <input type="hidden" name="icon" id="waterbodytype-icon"
+                     data-wq-type="file" data-wq-preview="waterbodytype-icon-preview">
+              <div>
+                <button type="button" data-inline="true" data-icon="camera"
+                   data-wq-action="take" data-wq-input="waterbodytype-icon">
+                   Camera
+                </button>
+                <button type="button" data-inline="true" data-icon="grid"
+                   data-wq-action="pick" data-wq-input="waterbodytype-icon">
+                   Gallery
+                </button>
+              </div>
+              {{/native}}
+              {{^native}}
+              <input type="file" name="icon" id="waterbodytype-icon" accept='image/*'
+                     data-wq-preview="waterbodytype-icon-preview">
+              {{/native}}
+              <p class="error waterbodytype-icon-errors"></p>
+            </li>
+            {{/icon.name}}
+            {{#icon.name}}
+            {{#icon}}
+            <li class="ui-field-contain">
+              <img src="{{image_url}}">
+              <label for="waterbodytype-icon">Photo</label>
+              <input type="text" id="waterbodytype-icon" disabled
+                  value="{{name}} ({{type}}, {{body.size}} bytes)">
+              <p class="error waterbodytype-icon-errors"></p>
+            </li>
+            {{/icon}}
+            {{/icon.name}}
+            <li>
+              <div class="ui-grid-a">
+                <div class="ui-block-a">
+                  <a href="{{rt}}/waterbodytypes/{{id}}" data-role="button" data-icon="back" data-direction="reverse">
+                    Back
+                  </a>
+                </div>
+                <div class="ui-block-b">
+                  <button type="submit" data-icon="check" data-theme="b">
+                    Submit
+                  </button>
+                </div>
+              </div>
+              <p class="error waterbodytype-errors"></p>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

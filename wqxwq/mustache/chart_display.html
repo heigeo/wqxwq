@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{name}}</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{title}}</h1>
+      </div>
+      <div role="main" class="ui-content">
+        {{#links}}
+        <a href="{{rt}}/{{url}}">{{label}}</a>
+        {{/links}}
+        <h2>{{title}}</h2>
+        {{#wq_chart_type}}
+        <hr>
+        <svg style="min-height:400px;" data-wq-url="{{url}}.csv{{url_params}}" data-wq-type="{{wq_chart_type}}"></svg>
+        {{/wq_chart_type}}
+        <hr>
+        <div data-role="collapsible">
+          <h3>Add Comparison Data</h3>
+          <ul data-role="listview">
+            <li data-role='list-divider'>Add Site</li>
+            {{#addsites}}
+            <li data-icon="plus">
+              <a href="{{url}}">{{label}}</a>
+            </li>
+            {{/addsites}}
+            {{^addsites}}
+            <li>No more nearby sites to add.</li>
+            {{/addsites}}
+            <li data-role='list-divider'>Add Parameter</li>
+            {{#addparameters}}
+            <li data-icon="plus">
+              <a href="{{url}}">{{label}}</a>
+            </li>
+            {{/addparameters}}
+            {{^addparameters}}
+            <li>No more parameters to add.</li>
+            {{/addparameters}}
+          </ul>
+        </div>
+        <div data-role="collapsible">
+          <h3>Export Table</h3>
+          Download As:
+          <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+            {{#available_formats}}
+            <a href="{{url}}.{{.}}{{url_params}}" rel="external" class="ui-btn ui-corner-all">
+              {{.}}
+            </a>
+            {{/available_formats}}
+          </div>
+          {{{table}}}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

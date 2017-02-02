@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} event</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} event</h1>
+      </div>
+      <div role="main" class="ui-content">
+        <form action="{{svc}}/events/{{id}}" method="post" data-ajax="false"
+            data-wq-json="true"
+            {{#outbox_id}}
+              data-wq-outbox-id="{{outbox_id}}"
+              data-wq-outbox-preserve=""
+            {{/outbox_id}}>
+          {{>csrf}}
+          {{#id}}
+          <input type=hidden name="_method" value="PUT">
+          {{/id}}
+          <ul data-role="listview" data-inset="true">
+            <li class="ui-field-contain">
+              <label for='event-site_id'>Site</label>
+              <select id='event-site_id' data-xform-type='string' name='site_id'>
+                <option value="">Select one...</option>
+                {{#site_list}}
+                <option value="{{id}}"{{#selected}} selected{{/selected}}>
+                 {{#outbox}}*{{/outbox}} {{label}}
+                </option>
+                {{/site_list}}
+              </select>
+              <p class='error event-site_id-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='event-type_id'>Type</label>
+              <select id='event-type_id' data-xform-type='string' name='type_id' required>
+                <option value="">Select one...</option>
+                {{#type_list}}
+                <option value="{{id}}"{{#selected}} selected{{/selected}}>
+                 {{#outbox}}*{{/outbox}} {{label}}
+                </option>
+                {{/type_list}}
+              </select>
+              <p class='error event-type_id-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='event-date'>Date</label>
+              <input id='event-date' type='date' data-xform-type='date' name='date' required value="{{date}}">
+              <p class='error event-date-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='event-depth'>Depth</label>
+              <input id='event-depth' type='number' data-xform-type='decimal' name='depth' required step='0.001' value="{{depth}}">
+              <p class='error event-depth-errors'></p>
+            </li>
+            <li>
+              <div class="ui-grid-a">
+                <div class="ui-block-a">
+                  <a href="{{rt}}/events/{{id}}" data-role="button" data-icon="back" data-direction="reverse">
+                    Back
+                  </a>
+                </div>
+                <div class="ui-block-b">
+                  <button type="submit" data-icon="check" data-theme="b">
+                    Submit
+                  </button>
+                </div>
+              </div>
+              <p class="error event-errors"></p>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

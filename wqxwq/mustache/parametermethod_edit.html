@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} parametermethod</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} parametermethod</h1>
+      </div>
+      <div role="main" class="ui-content">
+        <form action="{{svc}}/parametermethods/{{id}}" method="post" data-ajax="false"
+            data-wq-json="true"
+            {{#outbox_id}}
+              data-wq-outbox-id="{{outbox_id}}"
+              data-wq-outbox-preserve=""
+            {{/outbox_id}}>
+          {{>csrf}}
+          {{#id}}
+          <input type=hidden name="_method" value="PUT">
+          {{/id}}
+          <ul data-role="listview" data-inset="true">
+            <li class="ui-field-contain">
+              <label for='parametermethod-name'>Name</label>
+              <input id='parametermethod-name' type='text' data-xform-type='string' name='name' value="{{name}}">
+              <p class='error parametermethod-name-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='parametermethod-slug'>Slug</label>
+              <input id='parametermethod-slug' type='text' data-xform-type='string' name='slug' required value="{{slug}}">
+              <p class='error parametermethod-slug-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='parametermethod-context'>Context</label>
+              <input id='parametermethod-context' type='text' data-xform-type='string' name='context' required value="{{context}}">
+              <p class='error parametermethod-context-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='parametermethod-description'>Description</label>
+              <textarea id='parametermethod-description' name='description' data-xform-type="text" required>{{description}}</textarea>
+              <p class='error parametermethod-description-errors'></p>
+            </li>
+            <li>
+              <div class="ui-grid-a">
+                <div class="ui-block-a">
+                  <a href="{{rt}}/parametermethods/{{id}}" data-role="button" data-icon="back" data-direction="reverse">
+                    Back
+                  </a>
+                </div>
+                <div class="ui-block-b">
+                  <button type="submit" data-icon="check" data-theme="b">
+                    Submit
+                  </button>
+                </div>
+              </div>
+              <p class="error parametermethod-errors"></p>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

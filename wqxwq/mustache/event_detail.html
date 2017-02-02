@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{label}}</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{label}}</h1>
+      </div>
+      <div role="main" class="ui-content">
+          <h1>{{label}}</h1>
+          <table>
+            <tr>
+              <th>Site</th>
+              <td><a href="{{rt}}/sites/{{site_id}}">{{site_label}}</a></td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{{type_label}}</td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <td>{{date}}</td>
+            </tr>
+            {{#depth}}
+            <tr>
+              <th>Depth</th>
+              <td>{{depth}} <span style='color:#999'>ft</span></td>
+            </tr>
+            {{/depth}}
+            {{#comment}}
+            <tr>
+              <th>Comment</th>
+              <td>{{comment}}</td>
+            </tr>
+            {{/comment}}
+          </table>
+          <table class="ui-table table-stripe">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Method</th>
+                <th>Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#results}}
+              <tr>
+                <td><a href="{{rt}}/charts/{{site_id}}/{{type_id}}/timeseries">{{type_label}}</a></td>
+                <td style="white-space: nowrap"><strong>{{value}}</strong>{{#units}} <span style='color:#999'>{{units}}</span>{{/units}}<?td>
+                <td><acronym title="{{method_label}}">{{method_id}}</a></td>
+                <td>{{comment}}</td>
+              </tr>
+              {{/results}}
+              {{^results}}
+              <tr><td colspan=4>No results with values.</td></tr>
+              {{/results}}
+            </tbody>
+          </table>
+          <ul data-role="listview" data-inset="true">
+            <li data-role="list-divider">Activity ID(s)</li>
+            {{#reports}}
+            <li><a href="{{rt}}/reports/{{id}}">{{label}}</a></li>
+            {{/reports}}
+          </ul>
+      </div>
+    </div>
+  </body>
+</html>

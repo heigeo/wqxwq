@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{label}}</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{label}}</h1>
+        {{#page_config.can_change}}
+        <a href="{{rt}}/reports/{{id}}/edit" data-icon="edit" data-transition="flip">
+          Edit
+        </a>
+        {{/page_config.can_change}}
+      </div>
+      <div role="main" class="ui-content">
+          <h1>{{label}}</h1>
+          <table>
+            <tr>
+              <th>Monitoring Event</th>
+              <td><a href="{{rt}}/events/{{event_id}}">{{event_label}}</a></td>
+            </tr>
+            {{#time}}
+            <tr>
+              <th>Monitoring Start Time</th>
+              <td>{{time}}</td>
+            </tr>
+            {{/time}}
+            <tr>
+              <th>Activity ID</th>
+              <td>{{activity_id}}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>{{status_label}}</td>
+            </tr>
+            <tr>
+              <th>Entered On</th>
+              <td>{{entered_label}}</td>
+            </tr>
+            {{#comment}}
+            <tr>
+              <th>Comment</th>
+              <td>{{comment}}</td>
+            </tr>
+            {{/comment}}
+          </table>
+          <table class="ui-table table-stripe">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Method</th>
+                <th>Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#results}}
+              <tr>
+                <td>
+                  {{^empty}}
+                  <a href="{{rt}}/charts/{{site_id}}/{{type_id}}/timeseries">
+                  {{/empty}}
+                  {{type_label}}
+                  {{^empty}}
+                  </a>
+                  {{/empty}}
+                </td>
+                <td style="white-space: nowrap">
+                  <strong>
+                    {{#qualifier}}<acronym title="{{qualifier_label}}">{{/qualifier}}
+                      {{value}}
+                    {{#qualifier}}</acronym>{{/qualifier}}
+                  </strong>
+                  {{^empty}}{{#units}}
+                  <span style='color:#999'>{{units}}</span>
+                  {{/units}}{{/empty}}
+                </td>
+                <td><acronym title="{{method_label}}">{{method_id}}</a></td>
+                <td>{{comment}}</td>
+              </tr>
+              {{/results}}
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </body>
+</html>
