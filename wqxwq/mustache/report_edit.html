@@ -9,6 +9,19 @@
       <div data-role="header">
         {{>home}}
         <h1>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} report</h1>
+        {{#id}}
+        {{#page_config.can_delete}}
+        <form action="{{svc}}/reports/{{id}}" method="post" data-ajax="false"
+          data-wq-json="true" data-wq-background-sync="false"
+          onsubmit="return require('wq/app').confirmSubmit(this, 'Are you sure you want to delete this record?');">
+          {{>csrf}}
+          <input type=hidden name="_method" value="DELETE">
+          <button type="submit" data-icon="delete" class="ui-btn-right">
+            Delete
+          </button>
+        </form>
+        {{/page_config.can_delete}}
+        {{/id}}
       </div>
       <div role="main" class="ui-content">
         <form action="{{svc}}/reports/{{id}}" method="post" data-ajax="false"
@@ -25,9 +38,9 @@
           <ul data-role="listview" data-inset="true">
             <li data-role="list-divider">Event</li>
             {{#event}}
-            {{#id}}
+            {{^new_attachment}}{{#id}}
             <input type="hidden" name="event[{{@index}}][id]" value="{{id}}">
-            {{/id}}
+            {{/id}}{{/new_attachment}}
             <li class="ui-field-contain">
               <label for='report-event-site[slug]'>Site</label>
               <select id='report-event-site[slug]' data-xform-type='string' name='event[site][slug]' required>
@@ -81,9 +94,9 @@
             </li>
             <li data-role="list-divider">Results</li>
             {{#results}}
-            {{#id}}
+            {{^new_attachment}}{{#id}}
             <input type="hidden" name="results[{{@index}}][id]" value="{{id}}">
-            {{/id}}
+            {{/id}}{{/new_attachment}}
             <li class="ui-field-contain">
               <label for='report-results-{{@index}}-type_id'>Type</label>
               <select id='report-results-{{@index}}-type_id' data-xform-type='string' name='results[{{@index}}][type_id]' required>
@@ -114,7 +127,7 @@
               <p class='error report-results-{{@index}}-value-errors'></p>
             </li>
             <li class="ui-field-contain">
-              <fieldset data-xform-type='select1' data-role='controlgroup' data-type='horizontal' data-mini="true">
+              <fieldset data-xform-type='select one' data-role='controlgroup' data-type='horizontal' data-mini="true">
                 <legend>Qualifier</legend>
                 {{#qualifier_choices}}
                 <input type='radio' id='report-results-{{@index}}-qualifier-{{name}}' name='results[{{@index}}][qualifier]' value='{{name}}'{{#selected}} checked{{/selected}}>

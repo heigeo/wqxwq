@@ -45,6 +45,12 @@ setup(
             'mustache/*.*'
         ]
     },
+    install_requires=[
+        'vera',
+        'rest-pandas',
+        'matplotlib',
+        'data-wizard',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',

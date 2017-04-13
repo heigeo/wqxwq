@@ -14,26 +14,31 @@ from django.db.utils import ProgrammingError
 rest.router.register_model(
     Spreadsheet,
     fields=["id", "file"],
+    cache="none",
 )
 rest.router.register_model(
     WaterbodyType,
     fields="__all__",
     serializer=patterns.IdentifiedModelSerializer,
+    cache="all",
 )
 rest.router.register_model(
     Waterbody,
     fields="__all__",
     serializer=WaterbodySerializer,
+    cache="all",
 )
 rest.router.register_model(
     ParameterMethod,
     fields="__all__",
     serializer=patterns.IdentifiedModelSerializer,
+    cache="all",
 )
 rest.router.register_model(
     EventType,
     fields="__all__",
     serializer=patterns.IdentifiedModelSerializer,
+    cache="all",
 )
 rest.router.add_page('index', {
     'url': '',
@@ -76,11 +81,8 @@ rest.router.set_extra_config(
 
 
 # Override configuration for vera models
-rest.router.register_serializer(Site, SiteSerializer)
 rest.router.update_config(
     Site,
-    max_local_pages=0,
-    partial=True,
     map=[{
         'mode': 'list',
         'layers': [{
@@ -102,25 +104,6 @@ rest.router.update_config(
     }],
 )
 
-
-def event_filter(qs, req):
-    if req.path == '/events.json':
-        return qs.objects.none()
-    else:
-        return qs
-
+rest.router.register_serializer(Site, SiteSerializer)
 rest.router.register_serializer(Event, EventSerializer)
-rest.router.register_filter(Event, event_filter)
-rest.router.update_config(Event, max_local_pages=0)
-
-
-def report_filter(qs, req):
-    if req.path in ('/reports.json', '/reports', '/reports/'):
-        if req.user.is_authenticated:
-            return qs.filter(user=req.user)
-        else:
-            return qs.none()
-    return qs
-
 rest.router.register_serializer(Report, ReportSerializer)
-rest.router.register_filter(Report, report_filter)
