@@ -42,11 +42,13 @@ setup(
     packages=['wqxwq', 'wqxwq.migrations'],
     package_data={
         'wqxwq': [
-            'mustache/*.*'
+            'mustache/*.*',
+            'static/wqxwq/*.*',
         ]
     },
     install_requires=[
         'vera',
+        'climata',
         'rest-pandas',
         'matplotlib',
         'data-wizard',
@@ -58,6 +60,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Framework :: Django',
         'Intended Audience :: Science/Research',
     ]

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>eventtype List{{#parent_id}} for {{parent_label}}{{/parent_id}}</title>
+    <title>analyticalmethod List{{#parent_id}} for {{parent_label}}{{/parent_id}}</title>
     {{>head}}
   </head>
   <body>
     <div data-role="page" data-wq-sync-refresh="true">
       <div data-role="header">
         {{>home}}
-        <h1>eventtype List{{#parent_id}} for {{parent_label}}{{/parent_id}}</h1>
+        <h1>analyticalmethod List{{#parent_id}} for {{parent_label}}{{/parent_id}}</h1>
         {{#page_config.can_add}}
-        <a href="{{rt}}/eventtypes/new{{#parent_id}}?{{parent_page}}_id={{parent_id}}{{/parent_id}}" data-icon="plus">
+        <a href="{{rt}}/analyticalmethods/new{{#parent_id}}?{{parent_page}}_id={{parent_id}}{{/parent_id}}" data-icon="plus">
           Add New
         </a>
         {{/page_config.can_add}}
@@ -64,12 +64,12 @@
             {{/unsynced}}
             {{#list}}
             <li>
-              <a href="{{rt}}/eventtypes/{{id}}">{{label}}</a>
+              <a href="{{rt}}/analyticalmethods/{{id}}">{{label}}</a>
             </li>
             {{/list}}
             {{#page_config.can_add}}
             <li data-icon="plus" data-theme="b">
-              <a href="{{rt}}/eventtypes/new{{#parent_id}}?{{parent_page}}_id={{parent_id}}{{/parent_id}}">Add eventtype</a>
+              <a href="{{rt}}/analyticalmethods/new{{#parent_id}}?{{parent_page}}_id={{parent_id}}{{/parent_id}}">Add analyticalmethod</a>
             </li>
             {{/page_config.can_add}}
           </ul>

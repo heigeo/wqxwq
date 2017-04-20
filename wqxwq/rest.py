@@ -1,14 +1,32 @@
 from wq.db import rest
 from wq.db.patterns import rest as patterns
 from .models import (
-    Spreadsheet, WaterbodyType, Waterbody, ParameterMethod, EventType,
-    Site, Event, Report
+    Characteristic, MethodSpeciation, AnalyticalMethod, MeasureUnit,
+    Spreadsheet, WaterbodyType, Waterbody,
+    ActivityType, Site, Event, Report, Project,
 )
 from .serializers import (
-    WaterbodySerializer, SiteSerializer, EventSerializer, ReportSerializer
+    WqxDomainSerializer, CharacteristicSerializer,
+    WaterbodySerializer, SiteSerializer, ProjectSerializer,
+    EventSerializer, ReportSerializer,
 )
+from .views import WqxDomainViewSet
 from django.db.utils import ProgrammingError
 
+
+# Domain models
+rest.router.register_serializer(Characteristic, CharacteristicSerializer)
+rest.router.register_viewset(Characteristic, WqxDomainViewSet)
+wqx_opts = dict(
+    fields="__all__",
+    serializer=WqxDomainSerializer,
+    viewset=WqxDomainViewSet,
+    cache="all",
+)
+rest.router.register_model(AnalyticalMethod, **wqx_opts)
+rest.router.register_model(MethodSpeciation, **wqx_opts)
+rest.router.register_model(MeasureUnit, **wqx_opts)
+rest.router.register_model(ActivityType, **wqx_opts)
 
 # Models and pages unique to wqxwq
 rest.router.register_model(
@@ -29,15 +47,9 @@ rest.router.register_model(
     cache="all",
 )
 rest.router.register_model(
-    ParameterMethod,
+    Project,
     fields="__all__",
-    serializer=patterns.IdentifiedModelSerializer,
-    cache="all",
-)
-rest.router.register_model(
-    EventType,
-    fields="__all__",
-    serializer=patterns.IdentifiedModelSerializer,
+    serializer=ProjectSerializer,
     cache="all",
 )
 rest.router.add_page('index', {

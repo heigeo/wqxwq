@@ -8,36 +8,39 @@
   </head>
   <body>
     <div data-role="page" class="ui-page">
-      <div class="ui-grid-a ui-responsive" style="background-color:#666;margin-top:-1em;">
+      <div style="background-color:#666;">
+          <h1 style="color:#fff;text-shadow:none;margin:0;">
+            <img src="{{rt}}/images/icon-192.png" style="height:80px;margin:0.25em;vertical-align:middle">
+            {{project_name}} Water Quality Database
+          </h1>
+      </div>
+      <div class="ui-grid-a ui-responsive">
         <div class="ui-block-a">
-        <br><br>
-          <img src="{{rt}}/images/icon-192.png" style="float:left;margin:1em;">
-          <h1 style="color:#fff;text-shadow:none;">{{project_name}}</h1>
-          <h2 style="color:#fff;text-shadow:none;">Water Quality Database</h2>
+          <div class="ui-content">
+            <ul data-role="listview" data-inset="true">
+              <li data-role="list-divider">Explore Data</li>
+              <li>
+                <a href="{{rt}}/waterbodies/">By Water body</a>
+              </li>
+              <li>
+                <a href="{{rt}}/sites/">By Site</a>
+              </li>
+              <li data-icon="bullets">
+                <a href="{{rt}}/reports/">Recent Entries</a>
+              </li>
+              <li data-role="list-divider">Add Monitoring Data</li>
+              <li data-icon="bullets">
+                <a href="{{rt}}/projects/">Enter Online</a>
+              </li>
+              <li data-icon="grid">
+                <a href="{{rt}}/spreadsheets/new">Import From Spreadsheet</a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="ui-block-b">
-         <div class="ui-content">
-          <ul data-role="listview" data-inset="true">
-            <li data-role="list-divider">Explore Data</li>
-            <li>
-              <a href="{{rt}}/waterbodies/">By Water body</a>
-            </li>
-            <li>
-              <a href="{{rt}}/sites/">By Site</a>
-            </li>
-            <li data-role="list-divider">Add Monitoring Data</li>
-            <li data-icon="bullets">
-              <a href="{{rt}}/reports/new">Enter Online</a>
-            </li>
-            <li data-icon="grid">
-              <a href="{{rt}}/spreadsheets/new">Import From Spreadsheet</a>
-            </li>
-          </ul>
-         </div>
+          <div class="map list-map" id="index-map"></div>
         </div>
-      </div>
-      <div role="main" class="ui-content">
-        <div class="map list-map" id="index-map"></div>
       </div>
       <p class="footer">
         {{project_name}} WQ DB v{{version}}

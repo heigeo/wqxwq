@@ -10,7 +10,7 @@
         {{>home}}
         <h1>{{label}}</h1>
         {{#page_config.can_change}}
-        <a href="{{rt}}/reportstatuses/{{id}}/edit" data-icon="edit" data-transition="flip">
+        <a href="{{rt}}/analyticalmethods/{{id}}/edit" data-icon="edit" data-transition="flip">
           Edit
         </a>
         {{/page_config.can_change}}
@@ -27,8 +27,20 @@
               <td>{{slug}}</td>
             </tr>
             <tr>
-              <th>Is Valid</th>
-              <td>{{is_valid}}</td>
+              <th>Last updated</th>
+              <td>{{lastchangedate_label}}</td>
+            </tr>
+            <tr>
+              <th>Context</th>
+              <td>{{contextcode}}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{{description}}</td>
+            </tr>
+            <tr>
+              <th>Url</th>
+              <td>{{url}}</td>
             </tr>
           </table>
       </div>

@@ -37,7 +37,7 @@
           <ul data-role="listview" data-inset="true">
             <li class="ui-field-contain">
               <label for='site-name'>Name</label>
-              <input id='site-name' type='text' data-xform-type='string' name='name' value="{{name}}">
+              <input id='site-name' type='text' data-xform-type='string' name='name' required value="{{name}}">
               <p class='error site-name-errors'></p>
             </li>
             <li class="ui-field-contain">
@@ -62,45 +62,6 @@
                 {{/waterbody_list}}
               </select>
               <p class='error site-waterbody_id-errors'></p>
-            </li>
-            <li data-role="list-divider">Identifiers</li>
-            {{#identifiers}}
-            {{^new_attachment}}{{#id}}
-            <input type="hidden" name="identifiers[{{@index}}][id]" value="{{id}}">
-            {{/id}}{{/new_attachment}}
-            <li class="ui-field-contain">
-              <label for='site-identifiers-{{@index}}-name'>Name</label>
-              <input id='site-identifiers-{{@index}}-name' type='text' data-xform-type='string' name='identifiers[{{@index}}][name]' required value="{{name}}">
-              <p class='error site-identifiers-{{@index}}-name-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <label for='site-identifiers-{{@index}}-slug'>Slug</label>
-              <input id='site-identifiers-{{@index}}-slug' type='text' data-xform-type='string' name='identifiers[{{@index}}][slug]' required value="{{slug}}">
-              <p class='error site-identifiers-{{@index}}-slug-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <label for='site-identifiers-{{@index}}-authority_id'>Authority</label>
-              <select id='site-identifiers-{{@index}}-authority_id' data-xform-type='string' name='identifiers[{{@index}}][authority_id]' required>
-                <option value="">Select one...</option>
-                {{#authority_list}}
-                <option value="{{id}}"{{#selected}} selected{{/selected}}>
-                 {{#outbox}}*{{/outbox}} {{label}}
-                </option>
-                {{/authority_list}}
-              </select>
-              <p class='error site-identifiers-{{@index}}-authority_id-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <label for='site-identifiers-{{@index}}-is_primary'>Is Primary</label>
-              <input id='site-identifiers-{{@index}}-is_primary' type='text' data-xform-type='string' name='identifiers[{{@index}}][is_primary]' required value="{{is_primary}}">
-              <p class='error site-identifiers-{{@index}}-is_primary-errors'></p>
-            </li>
-            <li class="section-identifiers"></li>
-            {{/identifiers}}
-            <li>
-              <button type="button" data-wq-action="addattachment" data-wq-section="identifiers">
-                 Add Identifiers
-              </button>
             </li>
             <li>
               <div class="ui-grid-a">

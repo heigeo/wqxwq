@@ -1,8 +1,29 @@
+from wq.db.rest.serializers import LookupRelatedField
 from wq.db.patterns import serializers as patterns
 from vera.results import serializers as vera
 from vera.series.serializers import EventSerializer, ReportSerializer
 from rest_framework import serializers
-from .models import Parameter
+from .models import Characteristic, ProjectParameter, Result
+from django.db.models import Count
+
+
+class WqxDomainField(LookupRelatedField):
+    default_error_messages = {
+        'does_not_exist': 'Domain value {value} not found.',
+        'invalid': 'Invalid value',
+    }
+
+    def to_internal_value(self, data):
+        try:
+            return self.model.objects.get_by_identifier(data)
+        except self.model.DoesNotExist:
+            self.fail('does_not_exist', value=data)
+        except (TypeError, ValueError):
+            self.fail('invalid')
+
+
+class WqxDomainSerializer(patterns.IdentifiedModelSerializer):
+    pass
 
 
 class WaterbodySerializer(patterns.IdentifiedModelSerializer):
@@ -28,7 +49,7 @@ class SiteSerializer(patterns.IdentifiedModelSerializer):
         ).values_list('result_type_id', flat=True)
 
         params = []
-        for param in Parameter.objects.filter(pk__in=type_ids):
+        for param in Characteristic.objects.filter(pk__in=type_ids):
             results = instance.eventresult_set.filter(
                 result_type=param
             ).order_by('event_date')
@@ -69,12 +90,24 @@ class EventSerializer(EventSerializer):
         } for report in instance.report_set.all()]
 
 
+class ResultSerializer(vera.ResultSerializer):
+    def build_relational_field(self, field_name, relation_info):
+        field_class, field_kwargs = super(
+            ResultSerializer, self
+        ).build_relational_field(field_name, relation_info)
+        if field_class == LookupRelatedField:
+            field_class = WqxDomainField
+        return field_class, field_kwargs
+
+
 class ReportSerializer(ReportSerializer):
+    results = ResultSerializer(many=True)
+
     def get_wq_config(self):
         conf = super().get_wq_config()
         for field in conf['form']:
             if field['name'] == 'results':
-                field['initial'] = None
+                field['initial']['filter'] = {'projects': '{{project_id}}'}
         return conf
 
 
@@ -100,3 +133,53 @@ class EventResultSerializer(vera.EventResultSerializer):
         pandas_boxplot_group = 'site'
         pandas_boxplot_date = 'date'
         pandas_boxplot_header = ['units', 'parameter', 'tb', 'depth', 'type']
+
+
+class ProjectParameterSerializer(patterns.AttachmentSerializer):
+    class Meta(patterns.AttachmentSerializer.Meta):
+        model = ProjectParameter
+        exclude = ('project',)
+        object_field = 'project'
+        wq_config = {
+            'initial': 3,
+        }
+
+
+class ProjectSerializer(patterns.IdentifiedModelSerializer):
+    parameters = ProjectParameterSerializer(many=True, required=False)
+
+
+_characteristic_defaults = {}
+
+
+class CharacteristicSerializer(patterns.IdentifiedModelSerializer):
+    projects = serializers.SerializerMethodField()
+    default_speciations = serializers.SerializerMethodField()
+    default_units = serializers.SerializerMethodField()
+    default_methods = serializers.SerializerMethodField()
+
+    def get_default_speciations(self, instance):
+        return self.get_default_choices('speciation', instance)
+
+    def get_default_units(self, instance):
+        return self.get_default_choices('unit', instance)
+
+    def get_default_methods(self, instance):
+        return self.get_default_choices('method', instance)
+
+    def get_default_choices(self, field, instance):
+        _characteristic_defaults.setdefault(field, {})
+        defaults = _characteristic_defaults[field]
+
+        if instance.pk not in defaults:
+            ids = Result.objects.filter(
+                type=instance
+            ).values_list(field + '__slug').annotate(
+                Count('id')
+            ).order_by('-id__count')
+            defaults[instance.pk] = [id[0] for id in ids]
+
+        return defaults[instance.pk]
+
+    def get_projects(self, instance):
+        return [project.project.slug for project in instance.projects.all()]

@@ -10,7 +10,7 @@
         {{>home}}
         <h1>{{label}}</h1>
         {{#page_config.can_change}}
-        <a href="{{rt}}/eventtypes/{{id}}/edit" data-icon="edit" data-transition="flip">
+        <a href="{{rt}}/measureunits/{{id}}/edit" data-icon="edit" data-transition="flip">
           Edit
         </a>
         {{/page_config.can_change}}
@@ -25,6 +25,10 @@
             <tr>
               <th>Slug</th>
               <td>{{slug}}</td>
+            </tr>
+            <tr>
+              <th>Last updated</th>
+              <td>{{lastchangedate_label}}</td>
             </tr>
           </table>
       </div>

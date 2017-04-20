@@ -1,8 +1,93 @@
 from django.contrib.gis.db import models
 from wq.db.patterns import models as patterns
 from vera import base_models as vera
+from .wqx_models import WqxDomainModel, WqxDomainModelManager
 
 
+# WQX Domain tables
+
+class AnalyticalMethodContext(WqxDomainModel):
+    pass
+
+
+class AnalyticalMethod(WqxDomainModel):
+    contextcode = models.ForeignKey(
+        AnalyticalMethodContext,
+        null=True,
+        blank=True,
+        verbose_name='context',
+    )
+    description = models.TextField()
+    url = models.URLField()
+
+    wqx_code_field = 'id'
+
+
+class Characteristic(vera.BaseParameter):
+    objects = WqxDomainModelManager()
+    lastchangedate = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='last updated'
+    )
+
+    samplefractionrequired = models.NullBooleanField(
+        verbose_name="requires sample fraction"
+    )
+    picklist = models.NullBooleanField(
+        verbose_name='has choices',
+    )
+
+    wqx_code_field = 'name'
+    wqx_name_field = 'name'
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def choices(self):
+        if not self.picklist:
+            return []
+        return CharacteristicChoice.objects.filter(
+            characteristic=self
+        )
+
+
+class CharacteristicChoice(WqxDomainModel):
+    code = models.CharField(max_length=20, null=True, blank=True)
+    characteristic = models.ForeignKey(Characteristic)
+
+    wqx_domain = 'CharacteristicWithPickList'
+    wqx_code_field = 'uniqueidentifier'
+    wqx_name_field = 'description'
+    wqx_filter_field = 'characteristic'
+
+
+class MethodSpeciation(WqxDomainModel):
+    wqx_code_field = 'name'
+    wqx_name_field = 'name'
+
+
+class ActivityType(WqxDomainModel):
+    description = models.TextField(null=True, blank=True)
+
+    wqx_code_field = 'abbreviation'
+    wqx_name_field = 'code'
+
+    analyticalmethodrequired = models.NullBooleanField(
+        verbose_name='requires analytical method',
+    )
+    monitoringlocationrequired = models.NullBooleanField(
+        verbose_name='requires monitoring location',
+    )
+
+
+class MeasureUnit(WqxDomainModel):
+    wqx_code_field = 'code'
+    wqx_name_field = 'description'
+
+
+# Vera & Data Wizard Models
 class Spreadsheet(patterns.LabelModel):
     file = models.FileField()
 
@@ -43,21 +128,8 @@ class Site(vera.BaseSite):
         return self.waterbody.icon_url
 
 
-class ParameterMethod(patterns.IdentifiedModel):
-    context = models.CharField(max_length=10)
-    description = models.TextField()
-
-
-class Parameter(vera.BaseParameter):
-    method = models.ForeignKey(ParameterMethod, null=True, blank=True)
-
-
-class EventType(patterns.IdentifiedModel):
-    pass
-
-
 class Event(vera.BaseEvent):
-    type = models.ForeignKey(EventType)
+    type = models.ForeignKey(ActivityType)
     date = models.DateField()
     depth = models.FloatField(null=True, blank=True)
 
@@ -68,12 +140,6 @@ class Event(vera.BaseEvent):
         ordering = ('-date',)
 
 
-class Report(vera.BaseReport):
-    time = models.TimeField(null=True, blank=True)
-    activity_id = models.CharField(max_length=50, null=True, blank=True)
-    comment = models.TextField(null=True, blank=True)
-
-
 class Result(vera.BaseResult):
     QUALIFIER_CHOICES = (
         ("<", "Less Than"),
@@ -82,7 +148,10 @@ class Result(vera.BaseResult):
         ("NR", "Not Reported"),
         ("QL", "Quantification Limit"),
     )
-    method = models.ForeignKey(ParameterMethod, null=True, blank=True)
+    speciation = models.ForeignKey(MethodSpeciation, null=True, blank=True)
+    method = models.ForeignKey(AnalyticalMethod, null=True, blank=True)
+    unit = models.ForeignKey(MeasureUnit, null=True, blank=True)
+
     qualifier = models.CharField(
         max_length=2, null=True, blank=True, choices=QUALIFIER_CHOICES
     )
@@ -118,6 +187,22 @@ class Result(vera.BaseResult):
                 val = None
 
         vera.BaseResult.value.fset(self, val)
+
+
+class Project(patterns.IdentifiedModel):
+    description = models.TextField(null=True, blank=True)
+
+
+class ProjectParameter(models.Model):
+    project = models.ForeignKey(Project, related_name="parameters")
+    parameter = models.ForeignKey(Characteristic, related_name="projects")
+
+
+class Report(vera.BaseReport):
+    project = models.ForeignKey(Project, null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    activity_id = models.CharField(max_length=50, null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
 
 
 EventResult = vera.create_eventresult_model(Event, Result)

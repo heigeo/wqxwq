@@ -1,0 +1,14 @@
+<div data-role="popup" data-dismissible="false">
+  <h3>Select {{title}}</h3>
+  <div style="height:25em; width: 20em; overflow-y: scroll">
+    <ul data-role="listview" data-filter="true" data-filter-reveal="true">
+      {{#list}}
+      <li><a href="#" data-rel="back" data-id="{{id}}">
+        <h3>{{id}}</h3>
+        <p>{{label}}</p>
+      </a></li>
+      {{/list}}
+    </ul>
+  </div>
+  <a href="#" data-role="button" data-icon="back" data-rel="back">Cancel</a>
+</div>

@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>report List{{#parent_id}} for {{parent_label}}{{/parent_id}}</title>
+    <title>Monitoring Projects</title>
     {{>head}}
   </head>
   <body>
     <div data-role="page" data-wq-sync-refresh="true">
       <div data-role="header">
         {{>home}}
-        <h1>report List{{#parent_id}} for {{parent_label}}{{/parent_id}}</h1>
+        <h1>Monitoring Projects</h1>
         {{#page_config.can_add}}
-        <a data-icon="plus"
-          {{#parent_id}}
-          href="{{rt}}/reports/new?{{parent_page}}_id={{parent_id}}"
-          {{/parent_id}}
-          {{^parent_id}}
-          href="{{rt}}/projects/"
-          {{/parent_id}}>
+        <a href="{{rt}}/projects/new{{#parent_id}}?{{parent_page}}_id={{parent_id}}{{/parent_id}}" data-icon="plus">
           Add New
         </a>
         {{/page_config.can_add}}
@@ -70,22 +64,13 @@
             {{/unsynced}}
             {{#list}}
             <li>
-              <a href="{{rt}}/reports/{{id}}">
-                <h3>{{event_label}}</h3>
-                <p>Entered on {{entered_label}}</p>
-              </a>
+              <a href="{{rt}}/reports/new?project_id={{id}}">{{label}}</a>
+              <a data-icon="gear" href="{{rt}}/projects/{{id}}">{{label}}</a>
             </li>
             {{/list}}
             {{#page_config.can_add}}
             <li data-icon="plus" data-theme="b">
-              <a {{#parent_id}}
-                href="{{rt}}/reports/new?{{parent_page}}_id={{parent_id}}"
-                {{/parent_id}}
-                {{^parent_id}}
-                href="{{rt}}/projects/"
-                {{/parent_id}}>
-                Add report
-              </a>
+              <a href="{{rt}}/projects/new{{#parent_id}}?{{parent_page}}_id={{parent_id}}{{/parent_id}}">Add project</a>
             </li>
             {{/page_config.can_add}}
           </ul>

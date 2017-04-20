@@ -37,12 +37,12 @@
           <ul data-role="listview" data-inset="true">
             <li class="ui-field-contain">
               <label for='waterbodytype-name'>Name</label>
-              <input id='waterbodytype-name' type='text' data-xform-type='string' name='name' value="{{name}}">
+              <input id='waterbodytype-name' type='text' data-xform-type='string' name='name' required value="{{name}}">
               <p class='error waterbodytype-name-errors'></p>
             </li>
             <li class="ui-field-contain">
               <label for='waterbodytype-slug'>Slug</label>
-              <input id='waterbodytype-slug' type='text' data-xform-type='string' name='slug' required value="{{slug}}">
+              <input id='waterbodytype-slug' type='text' data-xform-type='string' name='slug' value="{{slug}}">
               <p class='error waterbodytype-slug-errors'></p>
             </li>
             {{^icon.name}}

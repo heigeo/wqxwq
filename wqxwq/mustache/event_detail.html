@@ -50,8 +50,8 @@
             <tbody>
               {{#results}}
               <tr>
-                <td><a href="{{rt}}/charts/{{site_id}}/{{type_id}}/timeseries">{{type_label}}</a></td>
-                <td style="white-space: nowrap"><strong>{{value}}</strong>{{#units}} <span style='color:#999'>{{units}}</span>{{/units}}<?td>
+                <td><a href="{{rt}}/charts/{{site_id}}/{{type_id}}/timeseries">{{type_label}}</a> {{#speciation_id}} <span style='color:#999'>{{speciation_id}}</span>{{/speciation_id}}</td>
+                <td style="white-space: nowrap"><strong>{{value}}</strong>{{#unit_id}} <span style='color:#999'>{{unit_id}}</span>{{/unit_id}}</td>
                 <td><acronym title="{{method_label}}">{{method_id}}</a></td>
                 <td>{{comment}}</td>
               </tr>

@@ -10,7 +10,7 @@
         {{>home}}
         <h1>{{label}}</h1>
         {{#page_config.can_change}}
-        <a href="{{rt}}/parameters/{{id}}/edit" data-icon="edit" data-transition="flip">
+        <a href="{{rt}}/characteristics/{{id}}/edit" data-icon="edit" data-transition="flip">
           Edit
         </a>
         {{/page_config.can_change}}
@@ -35,34 +35,16 @@
               <td>{{units}}</td>
             </tr>
             <tr>
-              <th>Method</th>
-              <td><a href="{{rt}}/parametermethods/{{method_id}}">{{method_label}}</a></td>
+              <th>Last updated</th>
+              <td>{{lastchangedate_label}}</td>
             </tr>
             <tr>
-              <th>Identifiers</th>
-              <td>
-                {{#identifiers}}
-                <table>
-                  <tr>
-                    <th>Name</th>
-                    <td>{{name}}</td>
-                  </tr>
-                  <tr>
-                    <th>Slug</th>
-                    <td>{{slug}}</td>
-                  </tr>
-                  <tr>
-                    <th>Authority</th>
-                    <td>{{authority_label}}</td>
-                  </tr>
-                  <tr>
-                    <th>Is Primary</th>
-                    <td>{{is_primary}}</td>
-                  </tr>
-                </table>
-                <hr>
-                {{/identifiers}}
-              </td>
+              <th>Requires sample fraction</th>
+              <td>{{samplefractionrequired}}</td>
+            </tr>
+            <tr>
+              <th>Has choices</th>
+              <td>{{picklist}}</td>
             </tr>
           </table>
       </div>

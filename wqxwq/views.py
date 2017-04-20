@@ -1,11 +1,33 @@
+from wq.db.rest.views import ModelViewSet
+from rest_framework.decorators import list_route
+from rest_framework.response import Response
 from vera.results import views as vera
 from .serializers import EventResultSerializer
-from .models import Parameter
+from .models import Characteristic
+
+
+class WqxDomainViewSet(ModelViewSet):
+    @list_route(methods=["GET"])
+    def unused(self, request, *args, **kwargs):
+        data = [{
+            'id': getattr(row, self.model.wqx_code_field),
+            'label': getattr(row, self.model.wqx_name_field),
+        } for row in self.model.objects.get_unused_values()]
+        return Response({
+            'count': len(data),
+            'list': data,
+        })
+
+
+class ChartFilterBackend(vera.ChartFilterBackend):
+    def filter_by_characteristic(self, qs, ids):
+        return self.filter_by_parameter(qs, ids)
 
 
 class ChartView(vera.ChartView):
     serializer_class = EventResultSerializer
     template_name = 'chart_display.html'
+    filter_backends = [ChartFilterBackend]
 
     def get_template_context(self, data):
         backend = self.filter_backends[0]()
@@ -18,7 +40,7 @@ class ChartView(vera.ChartView):
             return '/'.join(parts)
 
         label = ""
-        params = backend.filter_options.get('parameter')
+        params = backend.filter_options.get('characteristic')
         addparams = []
         if params:
             label += " vs. ".join([param.name for param in params])
@@ -29,7 +51,7 @@ class ChartView(vera.ChartView):
                 )
                 qs = qs.order_by('result_type_id').distinct('result_type_id')
                 qs = qs.values_list('result_type_id', flat=True)
-                paramset = set(Parameter.objects.filter(pk__in=qs))
+                paramset = set(Characteristic.objects.filter(pk__in=qs))
                 for param in params:
                     paramset.remove(param.content_object)
 

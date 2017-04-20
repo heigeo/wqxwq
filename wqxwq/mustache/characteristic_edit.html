@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} characteristic</title>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        {{>home}}
+        <h1>{{^id}}Add{{/id}}{{#id}}Edit{{/id}} characteristic</h1>
+        {{#id}}
+        {{#page_config.can_delete}}
+        <form action="{{svc}}/characteristics/{{id}}" method="post" data-ajax="false"
+          data-wq-json="true" data-wq-background-sync="false"
+          onsubmit="return require('wq/app').confirmSubmit(this, 'Are you sure you want to delete this record?');">
+          {{>csrf}}
+          <input type=hidden name="_method" value="DELETE">
+          <button type="submit" data-icon="delete" class="ui-btn-right">
+            Delete
+          </button>
+        </form>
+        {{/page_config.can_delete}}
+        {{/id}}
+      </div>
+      <div role="main" class="ui-content">
+        <form action="{{svc}}/characteristics/{{id}}" method="post" data-ajax="false"
+            data-wq-json="true"
+            {{#outbox_id}}
+              data-wq-outbox-id="{{outbox_id}}"
+              data-wq-outbox-preserve=""
+            {{/outbox_id}}>
+          {{>csrf}}
+          {{#id}}
+          <input type=hidden name="_method" value="PUT">
+          {{/id}}
+          <ul data-role="listview" data-inset="true">
+            <li class="ui-field-contain">
+              <label for='characteristic-name'>Name</label>
+              <input id='characteristic-name' type='text' data-xform-type='string' name='name' required value="{{name}}">
+              <p class='error characteristic-name-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='characteristic-slug'>Slug</label>
+              <input id='characteristic-slug' type='text' data-xform-type='string' name='slug' value="{{slug}}">
+              <p class='error characteristic-slug-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='characteristic-is_numeric'>Is Numeric</label>
+              <input id='characteristic-is_numeric' type='text' data-xform-type='string' name='is_numeric' value="{{is_numeric}}">
+              <p class='error characteristic-is_numeric-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='characteristic-units'>Units</label>
+              <input id='characteristic-units' type='text' data-xform-type='string' name='units' value="{{units}}">
+              <p class='error characteristic-units-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='characteristic-lastchangedate'>Last updated</label>
+              <input id='characteristic-lastchangedate' type='datetime-local' data-xform-type='dateTime' name='lastchangedate' value="{{lastchangedate}}">
+              <p class='error characteristic-lastchangedate-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='characteristic-samplefractionrequired'>Requires sample fraction</label>
+              <input id='characteristic-samplefractionrequired' type='text' data-xform-type='string' name='samplefractionrequired' value="{{samplefractionrequired}}">
+              <p class='error characteristic-samplefractionrequired-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='characteristic-picklist'>Has choices</label>
+              <input id='characteristic-picklist' type='text' data-xform-type='string' name='picklist' value="{{picklist}}">
+              <p class='error characteristic-picklist-errors'></p>
+            </li>
+            <li>
+              <div class="ui-grid-a">
+                <div class="ui-block-a">
+                  <a href="{{rt}}/characteristics/{{id}}" data-role="button" data-icon="back" data-direction="reverse">
+                    Back
+                  </a>
+                </div>
+                <div class="ui-block-b">
+                  <button type="submit" data-icon="check" data-theme="b">
+                    Submit
+                  </button>
+                </div>
+              </div>
+              <p class="error characteristic-errors"></p>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

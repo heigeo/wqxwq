@@ -35,6 +35,10 @@
           <input type=hidden name="_method" value="PUT">
           {{/id}}
           <input type="hidden" name="status[slug]" value="valid">
+
+          <div class="ui-grid-a ui-responsive">
+          <div class="ui-block-a">
+
           <ul data-role="listview" data-inset="true">
             <li data-role="list-divider">Event</li>
             {{#event}}
@@ -76,77 +80,156 @@
               <p class='error report-event-depth-errors'></p>
             </li>
             {{/event}}
+          </ul>
+
+          </div>
+          <div class="ui-block-b">
+
+          <ul data-role="listview" data-inset="true">
             <li data-role="list-divider">Activity</li>
+            <li class="ui-field-contain">
+              <label for='report-project[slug]'>Project</label>
+              <select id='report-project[slug]' data-xform-type='string' name='project[slug]'>
+                <option value="">Select one...</option>
+                {{#project[slug]_list}}
+                <option value="{{id}}"{{#selected}} selected{{/selected}}>
+                 {{#outbox}}*{{/outbox}} {{label}}
+                </option>
+                {{/project[slug]_list}}
+              </select>
+              <p class='error report-project[slug]-errors'></p>
+            </li>
+            <li class="ui-field-contain">
+              <label for='report-time'>Time</label>
+              <input id='report-time' type='time' data-xform-type='time' name='time' value="{{time}}">
+              <p class='error report-time-errors'></p>
+            </li>
             <li class="ui-field-contain">
               <label for='report-activity_id'>Activity ID</label>
               <input id='report-activity_id' type='text' data-xform-type='string' name='activity_id' value="{{activity_id}}">
               <p class='error report-activity_id-errors'></p>
             </li>
             <li class="ui-field-contain">
-              <label for='report-time'>Monitoring Start Time</label>
-              <input id='report-time' type='time' data-xform-type='time' name='time' value="{{time}}">
-              <p class='error report-time-errors'></p>
-            </li>
-            <li class="ui-field-contain">
               <label for='report-comment'>Comment</label>
               <textarea id='report-comment' name='comment' data-xform-type="text">{{comment}}</textarea>
               <p class='error report-comment-errors'></p>
             </li>
+          </ul>
+
+          </div>
+          </div>
+
+          <ul data-role="listview" data-inset="true">
             <li data-role="list-divider">Results</li>
-            {{#results}}
-            {{^new_attachment}}{{#id}}
-            <input type="hidden" name="results[{{@index}}][id]" value="{{id}}">
-            {{/id}}{{/new_attachment}}
-            <li class="ui-field-contain">
-              <label for='report-results-{{@index}}-type_id'>Type</label>
-              <select id='report-results-{{@index}}-type_id' data-xform-type='string' name='results[{{@index}}][type_id]' required>
-                <option value="">Select one...</option>
-                {{#type_list}}
-                <option value="{{id}}"{{#selected}} selected{{/selected}}>
-                 {{#outbox}}*{{/outbox}} {{label}}
-                </option>
-                {{/type_list}}
-              </select>
-              <p class='error report-results-{{@index}}-type_id-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <label for='report-results-{{@index}}-method_id'>Method</label>
-              <select id='report-results-{{@index}}-method_id' data-xform-type='string' name='results[{{@index}}][method_id]' required>
-                <option value="">Select one...</option>
-                {{#method_list}}
-                <option value="{{id}}"{{#selected}} selected{{/selected}}>
-                 {{#outbox}}*{{/outbox}} {{label}}
-                </option>
-                {{/method_list}}
-              </select>
-              <p class='error report-results-{{@index}}-method_id-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <label for='report-results-{{@index}}-value'>Value</label>
-              <input id='report-results-{{@index}}-value' type='text' data-xform-type='string' name='results[{{@index}}][value]' value="{{value}}">
-              <p class='error report-results-{{@index}}-value-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <fieldset data-xform-type='select one' data-role='controlgroup' data-type='horizontal' data-mini="true">
-                <legend>Qualifier</legend>
-                {{#qualifier_choices}}
-                <input type='radio' id='report-results-{{@index}}-qualifier-{{name}}' name='results[{{@index}}][qualifier]' value='{{name}}'{{#selected}} checked{{/selected}}>
-                <label for='report-results-{{@index}}-qualifier-{{name}}' title="{{label}}">{{name}}</label>
-                {{/qualifier_choices}}
-              </fieldset>
-              <p class='error report-results-{{@index}}-qualifier-errors'></p>
-            </li>
-            <li class="ui-field-contain">
-              <label for='report-results-{{@index}}-comment'>Comment</label>
-              <textarea id='report-results-{{@index}}-comment' name='results[{{@index}}][comment]' data-xform-type="text" required>{{comment}}</textarea>
-              <p class='error report-results-{{@index}}-comment-errors'></p>
-            </li>
-            <li class="section-results"></li>
-            {{/results}}
             <li>
-              <button type="button" data-wq-action="addattachment" data-wq-section="results">
-                 Add Results
-              </button>
+              <table data-role='table' class='entry-table ui-responsive'>
+                <thead>
+                  <tr>
+                    <th>Characteristic</th>
+                    <th>Spec.</th>
+                    <th>Analytical<br>Method</th>
+                    <th>Qualifier</th>
+                    <th>Result</th>
+                    <th>Units</th>
+                    <th>Comment</th>
+                  </tr>
+                </thead>
+                <tbody>
+            {{#results}}
+                  <tr class='section-results'>
+                    <td>
+                      {{^new_attachment}}{{#id}}
+                      <input type="hidden" name="results[{{@index}}][id]" value="{{id}}">
+                      {{/id}}{{/new_attachment}}
+                      <select id='report-results-{{@index}}-type_id' data-xform-type='string' name='results[{{@index}}][type_id]' required data-mini="true" tabindex="-1">
+                        <option value="">Select one...</option>
+                        {{#type_list}}
+                        <option value="{{id}}"{{#selected}} selected{{/selected}}>
+                         {{#outbox}}*{{/outbox}} {{label}}
+                        </option>
+                        {{/type_list}}
+                        <option value="LOOKUP">More options...</option>
+                      </select>
+                      <p class='error report-results-{{@index}}-type_id-errors'></p>
+                    </td>
+                    <td>
+                      <select id='report-results-{{@index}}-speciation_id' data-xform-type='string' name='results[{{@index}}][speciation_id]' data-mini="true" tabindex="-1">
+                        <optgroup label="Recommended"></optgroup>
+                        <optgroup label="Additional Options">
+                          <option value=""></option>
+                          {{#speciation_list}}
+                          <option value="{{id}}" title="{{label}}" {{#selected}} selected{{/selected}}>
+                           {{#outbox}}*{{/outbox}} {{id}}
+                          </option>
+                          {{/speciation_list}}
+                          <option value="LOOKUP">More options...</option>
+                        </optgroup>
+                      </select>
+                      <p class='error report-results-{{@index}}-speciation_id-errors'></p>
+                    </td>
+                    <td>
+                      <select id='report-results-{{@index}}-method_id' data-xform-type='string' name='results[{{@index}}][method_id]' required data-mini="true" tabindex="-1">
+                        <optgroup label="Recommended"></optgroup>
+                        <optgroup label="Additional Options">
+                          <option value=""></option>
+                          {{#method_list}}
+                          <option value="{{id}}" title="{{label}}" {{#selected}} selected{{/selected}}>
+                           {{#outbox}}*{{/outbox}} {{id}}
+                          </option>
+                          {{/method_list}}
+                          <option value="LOOKUP">More options...</option>
+                        </optgroup>
+                      </select>
+                      <p class='error report-results-{{@index}}-method_id-errors'></p>
+                    </td>
+                    <td>
+                      <select id='report-results-{{@index}}-qualifier' data-xform-type='select one' name='results[{{@index}}][qualifier]' data-mini="true" tabindex="-1">
+                        <option value=""></option>
+                        {{#qualifier_choices}}
+                        <option value="{{name}}" title="{{label}}" {{#selected}} selected{{/selected}}>
+                          {{name}}
+                        </option>
+                        {{/qualifier_choices}}
+                      </select>
+                      <p class='error report-results-{{@index}}-qualifier-errors'></p>
+                    </td>
+                    <td style='width:5em;'>
+                      <input id='report-results-{{@index}}-value' type='text' data-xform-type='string' name='results[{{@index}}][value]' value="{{value}}">
+                      <p class='error report-results-{{@index}}-value-errors'></p>
+                    </td>
+                    <td>
+                      <select id='report-results-{{@index}}-unit_id' data-xform-type='string' name='results[{{@index}}][unit_id]' data-mini="true" tabindex="-1">
+                        <optgroup label="Recommended"></optgroup>
+                        <optgroup label="Additional Options">
+                          <option value=""></option>
+                          {{#unit_list}}
+                          <option value="{{id}}" title="{{label}}" {{#selected}} selected{{/selected}}>
+                           {{#outbox}}*{{/outbox}} {{id}}
+                          </option>
+                          {{/unit_list}}
+                          <option value="LOOKUP">More options...</option>
+                        </optgroup>
+                      </select>
+                      <p class='error report-results-{{@index}}-unit_id-errors'></p>
+                    </td>
+                    <td>
+                      <input id='report-results-{{@index}}-comment' name='results[{{@index}}][comment]' data-xform-type="text" value="{{comment}}">
+                      <p class='error report-results-{{@index}}-comment-errors'></p>
+                    </td>
+                    <td class="result-divider">
+                       <hr>
+                    </td>
+                  </tr>
+                  {{/results}}
+                  <tr>
+                    <td colspan=7>
+                      <button type="button" data-wq-action="addattachment" data-wq-section="results" data-icon="plus">
+                         Add Result
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </li>
             <li>
               <div class="ui-grid-a">
