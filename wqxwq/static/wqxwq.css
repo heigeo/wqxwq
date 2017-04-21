@@ -1,0 +1,34 @@
+.footer {
+    padding-top: 0.25em;
+    border-top: 1px solid #999;
+}
+
+.entry-table td {
+    padding: 0;
+}
+
+.entry-table .ui-btn {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-color: #eee;
+}
+.entry-table .ui-btn-icon-right::after {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.entry-table .error {
+    max-width: 20em;
+    white-space: normal;
+    text-overflow: unset;
+    line-height: 1.1em;
+}
+.entry-table .error:empty {
+    display: none;
+}
+
+@media screen and (min-width: 35em) {
+    .result-divider {
+         display: none !important;
+    }
+}

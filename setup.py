@@ -48,6 +48,7 @@ setup(
     package_data={
         'wqxwq': [
             'mustache/*.*',
+            'static/wqxwq.*',
             'static/wqxwq/*.*',
         ]
     },

@@ -1,13 +1,19 @@
-define(['./report', './export', './context'], function(report, exportUtil, context) {
-    var plugins = [report, exportUtil, context];
+define([
+    'wq/map',
+    'wq/photos',
+    'wq/patterns',
+    'wq/chartapp',
+    'wq/progress',
+    './report',
+    './export',
+    './context'
+],
+function() {
+    var plugins = [].slice.call(arguments);
     function registerAll(app) {
-        plugins.forEach(function(plugin) {
-            app.use(plugin);
-        });
+        plugins.forEach(app.use);
     }
     return {
-        'report': report,
-        'export': exportUtil,
         'plugins': plugins,
         'registerAll': registerAll,
     }

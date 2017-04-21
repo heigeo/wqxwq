@@ -1,10 +1,11 @@
-from wq.db.rest.views import ModelViewSet, SimpleView
+from wq.db.rest.views import ModelViewSet, SimpleViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.renderers import BaseRenderer
+from rest_pandas import PandasViewSet
 from vera.results import views as vera
 from .serializers import EventResultSerializer
-from .models import Characteristic
+from .models import Characteristic, EventResult
 from .util import export_wqx_bytes, generate_filename
 
 
@@ -26,7 +27,7 @@ class ChartFilterBackend(vera.ChartFilterBackend):
         return self.filter_by_parameter(qs, ids)
 
 
-class ChartView(vera.ChartView):
+class ChartViewSet(vera.ChartView, PandasViewSet):
     serializer_class = EventResultSerializer
     template_name = 'chart_display.html'
     filter_backends = [ChartFilterBackend]
@@ -98,17 +99,17 @@ class ChartView(vera.ChartView):
         }
 
 
-class TimeSeriesView(ChartView):
+class TimeSeriesViewSet(ChartViewSet):
     serializer_class = EventResultSerializer
     pandas_serializer_class = vera.PandasUnstackedSerializer
 
 
-class ScatterView(ChartView):
+class ScatterViewSet(ChartViewSet):
     serializer_class = EventResultSerializer
     pandas_serializer_class = vera.PandasScatterSerializer
 
 
-class BoxPlotView(ChartView):
+class BoxPlotViewSet(ChartViewSet):
     serializer_class = EventResultSerializer
     pandas_serializer_class = vera.PandasBoxplotSerializer
 
@@ -128,10 +129,11 @@ class OldExcelRenderer(FileRenderer):
     format = "xls"
 
 
-class WqxExportView(SimpleView):
+class WqxExportViewSet(SimpleViewSet):
+    queryset = EventResult.objects.none()
     renderer_classes = [ExcelRenderer, OldExcelRenderer]
 
-    def get(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         start_date = request.GET.get('start')
         end_date = request.GET.get('end')
         format = request.accepted_renderer.format
