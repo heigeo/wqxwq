@@ -1,9 +1,11 @@
-from wq.db.rest.views import ModelViewSet
+from wq.db.rest.views import ModelViewSet, SimpleView
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.renderers import BaseRenderer
 from vera.results import views as vera
 from .serializers import EventResultSerializer
 from .models import Characteristic
+from .util import export_wqx_bytes, generate_filename
 
 
 class WqxDomainViewSet(ModelViewSet):
@@ -109,3 +111,35 @@ class ScatterView(ChartView):
 class BoxPlotView(ChartView):
     serializer_class = EventResultSerializer
     pandas_serializer_class = vera.PandasBoxplotSerializer
+
+
+class FileRenderer(BaseRenderer):
+    def render(self, data, media_type=None, renderer_context=None):
+        return data
+
+
+class ExcelRenderer(FileRenderer):
+    media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  # noqa
+    format = "xlsx"
+
+
+class OldExcelRenderer(FileRenderer):
+    media_type = "application/vnd.ms-excel"
+    format = "xls"
+
+
+class WqxExportView(SimpleView):
+    renderer_classes = [ExcelRenderer, OldExcelRenderer]
+
+    def get(self, request, *args, **kwargs):
+        start_date = request.GET.get('start')
+        end_date = request.GET.get('end')
+        format = request.accepted_renderer.format
+        data, start, end = export_wqx_bytes(format, start_date, end_date)
+        filename = generate_filename(start, end, format)
+        return Response(
+            data,
+            headers={
+               'Content-Disposition': 'attachment; filename="%s"' % filename,
+            }
+        )

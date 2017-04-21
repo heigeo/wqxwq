@@ -1,0 +1,41 @@
+<div data-role="popup" data-wq-position-to="page">
+  <form action="{{rt}}/export/wqx" method="get" data-ajax="false" data-wq-json="false">
+    <ul data-role="listview" style="min-width: 20em;">
+      <li data-role="list-divider">Export WQX Spreadsheet</li>
+      <li class="ui-field-contain">
+        <label for='export-start'>Start Date</label>
+        <input id='export-start' type='date' name='start' value='{{#current_year}}{{current_year}}-01-01{{/current_year}}' placeholder='Earliest Data'>
+      </li>
+      <li class="ui-field-contain">
+        <label for='export-end'>End Date</label>
+        <input id='export-end' type='date' name='end' placeholder='Latest Data'>
+      </li>
+      <li class="ui-field-contain">
+	<fieldset data-role='controlgroup' data-type='horizontal'>
+	  <legend>Format</legend>
+	  <input type='radio' id='format-xlsx' name='format' value='xlsx' checked>
+	  <label for='format-xlsx'>XLSX</label>
+	  <input type='radio' id='format-xls' name='format' value='xls'>
+	  <label for='format-xls'>XLS</label>
+	</fieldset>
+      </li>
+      <li>
+        <div class="ui-grid-a">
+          <div class="ui-block-a">
+            <a href="#" data-role="button" data-icon="back" data-rel="back">
+              Cancel
+            </a>
+          </div>
+          <div class="ui-block-b">
+            <button type="submit" data-icon="check" data-theme="b">
+              Export
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </form>
+</div>
+
+
+

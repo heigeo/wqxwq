@@ -64,6 +64,9 @@ rest.router.add_page('index', {
         }]
     }
 })
+rest.router.add_page('export', {
+    'url': 'export',
+})
 
 try:
     icons = [{

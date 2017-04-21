@@ -39,7 +39,12 @@ setup(
     license='MIT',
     description=LONG_DESCRIPTION.strip(),
     long_description=parse_markdown_readme(),
-    packages=['wqxwq', 'wqxwq.migrations'],
+    packages=[
+        'wqxwq',
+        'wqxwq.migrations',
+        'wqxwq.management',
+        'wqxwq.management.commands',
+    ],
     package_data={
         'wqxwq': [
             'mustache/*.*',
